@@ -55,15 +55,11 @@ class MyStack
     {
         // Add your code here
         StackNode node = new StackNode(a);
-        // node.data = a;
-        StackNode ptr = top;
-        if(ptr==null){
+        if(top==null)
             top = node;
-        }else{
-            while(ptr.next != null){
-                ptr = ptr.next;
-            }
-            ptr.next = node;
+        else{
+            node.next = top;
+            top = node;
         }
     }
     
@@ -72,20 +68,10 @@ class MyStack
     {
         // Add your code here
         if(top==null)return -1;
-        if(top.next==null){
+        else{
             int val = top.data;
-            top=null;
+            top=top.next;
             return val;
         }
-        StackNode curr = top;
-        StackNode prev = null;
-        
-        while(curr.next != null){
-            prev = curr;
-            curr = curr.next;
-        }
-        int val = curr.data;
-        prev.next = null;
-        return val;
     }
 }
