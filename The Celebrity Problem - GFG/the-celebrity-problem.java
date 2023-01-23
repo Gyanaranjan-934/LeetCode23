@@ -36,15 +36,17 @@ class Solution
     int celebrity(int arr[][], int n)
     {
     	// code here 
-    	Stack<Integer> s = new Stack<>();
+    	int cnt = -1;
     	for(int i=0;i<n;i++){
     	    int sum = 0;
     	    for(int j=0;j<n;j++){
     	        sum += arr[i][j];
     	    }
-    	    if(sum==0)s.push(i);
+    	    if(sum==0){
+    	        if(cnt==-1)cnt=i;
+    	        else return -1;
+    	    }
     	}
-    	if(s.size()==1)return s.peek();
-    	return -1;
+    	return cnt;
     }
 }
