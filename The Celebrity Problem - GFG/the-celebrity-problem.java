@@ -36,17 +36,17 @@ class Solution
     int celebrity(int arr[][], int n)
     {
     	// code here 
-    	int cnt = -1;
+    	int start = 0;
+    	int end = n-1;
+    	while(start<end){
+    	    if(arr[start][end]==0)end--;
+    	    else start++;
+    	}
     	for(int i=0;i<n;i++){
-    	    int sum = 0;
-    	    for(int j=0;j<n;j++){
-    	        sum += arr[i][j];
-    	    }
-    	    if(sum==0){
-    	        if(cnt==-1)cnt=i;
-    	        else return -1;
+    	    if(i!=start){
+    	        if(arr[start][i]==1 || arr[i][start]==0)return -1;
     	    }
     	}
-    	return cnt;
+    	return start;
     }
 }
