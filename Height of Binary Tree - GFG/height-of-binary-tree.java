@@ -121,22 +121,10 @@ class Node
 
 class Solution {
     //Function to find the height of a binary tree.
-    int height(Node node) 
+    int height(Node root) 
     {
         // code here 
-        Queue<Node> q = new LinkedList<>();
-        if(node==null)return 0;
-        int height=1;
-        q.add(node);
-        while(!q.isEmpty()){
-            int size = q.size();
-            for(int i=0;i<size;i++){
-                Node temp = q.remove();
-                if(temp.left != null)q.add(temp.left);
-                if(temp.right != null)q.add(temp.right);
-            }
-            if(!q.isEmpty())height++;
-        }
-        return height;
+        if(root==null)return 0;
+        return 1+Math.max(height(root.left),height(root.right));
     }
 }
