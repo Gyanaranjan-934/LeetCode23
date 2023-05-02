@@ -39,9 +39,29 @@ class Solution {
         // return Math.max(pick,notPick);
         
         // 2. Memoization
-        int[] dp = new int[n+1];
-        Arrays.fill(dp,-1);
-        return memFunc(arr,n-1,dp);
+        // int[] dp = new int[n+1];
+        // Arrays.fill(dp,-1);
+        // return memFunc(arr,n-1,dp);
+        
+        // 3. Tabulation
+        int[] dp = new int[n];
+        dp[0] = 0;
+        int negInd = 0;
+        
+        for(int i=0;i<n;i++){
+            int pick = arr[i];
+            if(i>1){
+                pick += dp[i-2];
+            }
+            int notPick = 0;
+            if(i>0)
+                notPick = dp[i-1];
+            
+            dp[i] = Math.max(pick,notPick);
+            
+        }
+        return dp[n-1];
+        
     }
     int memFunc(int[] arr,int n,int[] dp){
         if(n<0)return 0;
