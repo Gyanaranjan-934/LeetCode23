@@ -45,21 +45,46 @@ class Solution
         // return memFunc(a-1,b-1,dp);
         
         // 3. Tabulation
-        int[][] dp = new int[a][b];
-        for(int i=0;i<a;i++){
-            dp[i][0] = 1;
-        }
-        for(int i=0;i<b;i++){
-            dp[0][i] = 1;
-        }
+        // int[][] dp = new int[a][b];
+        // for(int i=0;i<a;i++){
+        //     dp[i][0] = 1;
+        // }
+        // for(int i=0;i<b;i++){
+        //     dp[0][i] = 1;
+        // }
         
         
-        for(int i=1;i<a;i++){
-            for(int j=1;j<b;j++){
-                dp[i][j] = dp[i-1][j]+dp[i][j-1];
+        // for(int i=1;i<a;i++){
+        //     for(int j=1;j<b;j++){
+        //         dp[i][j] = dp[i-1][j]+dp[i][j-1];
+        //     }
+        // }
+        // return dp[a-1][b-1];
+        
+        // 4. Space Optimization
+        int prev[]=new int[b];
+        for(int i=0; i<a; i++){
+            int temp[]=new int[b];
+            for(int j=0; j<b; j++){
+                if(i==0 && j==0){
+                    temp[j]=1;
+                    continue;
+                }
+            
+                int up=0;
+                int left =0;
+            
+                if(i>0)
+                    up = prev[j];
+                if(j>0)
+                    left = temp[j-1];
+                
+                temp[j] = up + left;
             }
+            prev = temp;
         }
-        return dp[a-1][b-1];
+    
+        return prev[b-1];
         
     }
     
