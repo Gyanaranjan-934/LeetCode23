@@ -35,10 +35,34 @@ class Solution{
         // return recFunc(n-1,tasks,3);
         
         // 2. Memoization
+        // int[][] dp = new int[n][4];
+        // for(int[] row: dp)
+        //     Arrays.fill(row,-1);
+        // return memFunc(n-1,tasks,3,dp);
+        
+        // 3. Tabulation
         int[][] dp = new int[n][4];
-        for(int[] row: dp)
-            Arrays.fill(row,-1);
-        return memFunc(n-1,tasks,3,dp);
+        
+        dp[0][0] = Math.max(tasks[0][1],tasks[0][2]);
+        dp[0][1] = Math.max(tasks[0][0],tasks[0][2]);
+        dp[0][2] = Math.max(tasks[0][1],tasks[0][0]);
+        dp[0][3] = Math.max(tasks[0][0],Math.max(tasks[0][1],tasks[0][2]));
+        
+        for (int day = 1; day < n; day++) {
+            for (int last = 0; last < 4; last++) {
+                dp[day][last] = 0;
+                for (int task = 0; task <= 2; task++) {
+                    if (task != last) {
+                        int activity = tasks[day][task] + dp[day - 1][task];
+                        dp[day][last] = Math.max(dp[day][last], activity);
+                    }
+                }
+            }
+
+        }
+
+        return dp[n - 1][3];
+        
     }
     
     public int recFunc(int ind,int[][] tasks,int task){
