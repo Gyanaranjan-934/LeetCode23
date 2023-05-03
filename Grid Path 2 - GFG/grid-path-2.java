@@ -30,26 +30,53 @@ class GFG {
 // User function Template for Javahttps://www.geeksforgeeks.org/jobs?tab=studentjobfair
 
 class Solution {
-    public int totalWays(int n, int m, int grid[][]) {
+    public int totalWays(int a, int b, int grid[][]) {
         // 1. Recursion
-        // return recFunc(m-1,n-1,grid);
+        // return recFunc(b-1,a-1,grid);
         
         // 2. Memoization
-        int[][] dp = new int[n][m];
-        for(int[] row : dp)
-            Arrays.fill(row,-1);
+        // int[][] dp = new int[a][b];
+        // for(int[] row : dp)
+        //     Arrays.fill(row,-1);
         
-        return memFunc(n-1,m-1,grid,dp);
+        // return memFunc(a-1,b-1,grid,dp);
+        
+        // 3. Tabulation
+        int[][] dp = new int[a][b];
+        for(int i=0;i<a;i++){
+            for(int j=0;j<b;j++){
+                if(grid[i][j]==1)dp[i][j]=-1;
+            }
+        }
+        for(int i=0;i<a;i++){
+            for(int j=0;j<b;j++){
+                if(i==0 && j==0 && dp[i][j] != -1){
+                    dp[i][j] = 1;
+                    continue;
+                }
+                int up = 0;
+                int left = 0;
+                if(i>0 && dp[i-1][j]!=-1){
+                    up = dp[i-1][j];
+                }
+                if(j>0 && dp[i][j-1]!= -1){
+                    left = dp[i][j-1];
+                }
+                if(dp[i][j]!=-1)
+                    dp[i][j] = (up%1000000007+left%1000000007)%1000000007;
+            }
+        }
+        return dp[a-1][b-1]==-1 ? 0 : dp[a-1][b-1];
     }
-    public int recFunc(int m,int n,int[][] grid){
-        if(m<0 || n<0 || grid[n][m]==1)return 0;
-        if(m==0 && n==0)return 1;
-        return recFunc(m-1,n,grid)+recFunc(m,n-1,grid);
+    public int recFunc(int b,int a,int[][] grid){
+        if(b<0 || a<0 || grid[a][b]==1)return 0;
+        if(b==0 && a==0)return 1;
+        return recFunc(b-1,a,grid)+recFunc(b,a-1,grid);
     }
-    public int memFunc(int n,int m,int[][] grid,int[][] dp){
-        if(m<0 || n<0 || grid[n][m]==1)return 0;
-        if(m==0 && n==0)return 1;
-        if(dp[n][m] != -1)return dp[n][m];
-        return dp[n][m] = (memFunc(n,m-1,grid,dp)%1000000007+memFunc(n-1,m,grid,dp)%1000000007)%1000000007;
+    public int memFunc(int a,int b,int[][] grid,int[][] dp){
+        if(b<0 || a<0 || grid[a][b]==1)return 0;
+        if(b==0 && a==0)return 1;
+        if(dp[a][b] != -1)return dp[a][b];
+        return dp[a][b] = (memFunc(a,b-1,grid,dp)%1000000007+memFunc(a-1,b,grid,dp)%1000000007)%1000000007;
     }
 }
