@@ -42,24 +42,23 @@ class Solution{
         // return minPath;
         
         // 2. Tabulation
-        int[][] dp = new int[n][n];
+        int[][] dp = new int[n][n+1];
         
-        for(int j=0; j<n; j++){
-            dp[0][j] = mat[0][j];
+        for(int i=0;i<n;i++){
+            dp[i][0] = mat[i][0];
+            dp[0][i] = mat[0][i];
         }
-        
+        for(int i=0;i<n;i++)
+            dp[i][n]=(int)Math.pow(10,-9);
         for(int i=1;i<n;i++){
             for(int j=0;j<n;j++){
-                int up = mat[i][j] + dp[i-1][j];
+                int up = dp[i-1][j];
+                int left = (int)Math.pow(10,-9);
+                if(j>0)
+                    left = dp[i-1][j-1];
+                int right = dp[i-1][j+1];
                 
-                int left = mat[i][j];
-                if(j>0)left += dp[i-1][j-1];
-                
-                int right = mat[i][j];
-                if(j<n-1)
-                    right += dp[i-1][j+1];
-                    
-                dp[i][j] = Math.max(up,Math.max(left,right));
+                dp[i][j] = mat[i][j] + Math.max(up,Math.max(left,right));
             }
         }
         int maxi = Integer.MIN_VALUE;
@@ -67,7 +66,9 @@ class Solution{
         for(int j=0; j<n;j++){
             maxi = Math.max(maxi,dp[n-1][j]);
         }
+        
         return maxi;
+        
     }
     
     static int recFunc(int r,int c,int[][] mat,int[][] dp){
