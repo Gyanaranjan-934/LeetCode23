@@ -42,32 +42,63 @@ class Solution{
         // return minPath;
         
         // 2. Tabulation
-        int[][] dp = new int[n][n+1];
+        // int[][] dp = new int[n][n+1];
+        
+        // for(int i=0;i<n;i++){
+        //     dp[i][0] = mat[i][0];
+        //     dp[0][i] = mat[0][i];
+        // }
+        // for(int i=0;i<n;i++)
+        //     dp[i][n]=(int)Math.pow(10,-9);
+        // for(int i=1;i<n;i++){
+        //     for(int j=0;j<n;j++){
+        //         int up = dp[i-1][j];
+        //         int left = (int)Math.pow(10,-9);
+        //         if(j>0)
+        //             left = dp[i-1][j-1];
+        //         int right = dp[i-1][j+1];
+                
+        //         dp[i][j] = mat[i][j] + Math.max(up,Math.max(left,right));
+        //     }
+        // }
+        // int maxi = Integer.MIN_VALUE;
+    
+        // for(int j=0; j<n;j++){
+        //     maxi = Math.max(maxi,dp[n-1][j]);
+        // }
+        
+        // return maxi;
+        
+        // 4. Space Optimization
+        int[] prev = new int[n];
+        
+        for(int i=0;i<n;i++)
+            prev[i] = mat[0][i];
+        
+        for(int i=1;i<n;i++){
+            int[] curr = new int[n];
+            for(int j=0;j<n;j++){
+                int up = mat[i][j]+prev[j];
+                int left = mat[i][j];
+                if(j>0) 
+                    left += prev[j-1];
+                
+                int right = mat[i][j];
+                if(j<n-1) 
+                    right += prev[j+1];
+                    
+                curr[j] = Math.max(up,Math.max(left,right));
+            }
+            prev = curr;
+        }
+        
+        int maxi = Integer.MIN_VALUE;
         
         for(int i=0;i<n;i++){
-            dp[i][0] = mat[i][0];
-            dp[0][i] = mat[0][i];
+            maxi = Math.max(prev[i],maxi);
         }
-        for(int i=0;i<n;i++)
-            dp[i][n]=(int)Math.pow(10,-9);
-        for(int i=1;i<n;i++){
-            for(int j=0;j<n;j++){
-                int up = dp[i-1][j];
-                int left = (int)Math.pow(10,-9);
-                if(j>0)
-                    left = dp[i-1][j-1];
-                int right = dp[i-1][j+1];
-                
-                dp[i][j] = mat[i][j] + Math.max(up,Math.max(left,right));
-            }
-        }
-        int maxi = Integer.MIN_VALUE;
-    
-        for(int j=0; j<n;j++){
-            maxi = Math.max(maxi,dp[n-1][j]);
-        }
-        
         return maxi;
+        
         
     }
     
