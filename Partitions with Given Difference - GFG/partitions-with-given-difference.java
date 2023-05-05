@@ -39,11 +39,31 @@ class Solution{
             sum += i;
         int tar = (sum-d)/2;
         if(sum-d <0 || (sum-d)%2==1)return 0;
-        // 1. Recursion
-        int[][] dp = new int[n][tar+1];
-	    for(int[] row : dp)
-	        Arrays.fill(row,-1);
-	    return recFunc(n-1,arr,tar,dp);        
+        // 1. Recursion+Memoization
+        //int[][] dp = new int[n][tar+1];
+	    //for(int[] row : dp)
+	    //    Arrays.fill(row,-1);
+	    //return recFunc(n-1,arr,tar,dp); 
+	   
+	    //// 2. Tabulation
+	   int[][] dp = new int[n+1][tar+1];
+	   for(int j=1;j<=tar;j++)
+	        dp[0][j] = 0;
+	    dp[0][0] = 1;
+	    
+	    // tabulation
+	    for(int i=1;i<=n;i++){
+	        for(int j=0;j<=tar;j++){
+	            if(arr[i-1] > j){
+	                dp[i][j] = dp[i-1][j];
+	            }
+	            else{
+	                dp[i][j] = (dp[i-1][j-arr[i-1]] + dp[i-1][j])%1000000007;
+	            }
+	        }
+	    }
+	    
+	    return dp[n][tar];
         
     }
     
