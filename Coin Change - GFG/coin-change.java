@@ -25,17 +25,37 @@ class GfG {
 // User function Template for Java
 
 class Solution {
-    public long count(int coins[], int N, int sum) {
+    public long count(int coins[], int n, int sum) {
         // 1. Recursion + Memoization
-        long[][] dp = new long[N][sum+1];
-        for(long[] row : dp)
-            Arrays.fill(row,-1);
-        return recFunc(N-1,coins,sum,dp);
+        // long[][] dp = new long[n][sum+1];
+        // for(long[] row : dp)
+        //     Arrays.fill(row,-1);
+        // return recFunc(n-1,coins,sum,dp);
+        
+        // 2. Tabulation
+        long[][] dp = new long[n][sum+1];
+        
+        for(int i=0;i<=sum;i++)
+            if(i%coins[0]==0)
+                dp[0][i] = 1;
+        
+        for(int ind=1;ind<n;ind++){
+            for(int j=0;j<=sum;j++){
+                long notPick = dp[ind-1][j];
+                long pick = 0;
+                if(j>=coins[ind])
+                    pick = dp[ind][j-coins[ind]];
+                
+                dp[ind][j] = pick+notPick;
+            }
+        }
+        
+        return dp[n-1][sum];
+        
     }
     public long recFunc(int ind,int[] arr,int sum,long[][] dp){
         if(ind==0){
-            if(sum%arr[ind]==0)return 1;
-            return 0;
+            return sum%arr[ind]==0 ? 1 : 0;
         }
         if(sum==0)return 1;
         if(dp[ind][sum] != -1) return dp[ind][sum];
