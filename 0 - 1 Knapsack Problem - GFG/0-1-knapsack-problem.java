@@ -58,25 +58,41 @@ class Solution
         // return recFunc(n-1,w,wt,val,dp);
         
         // 2. Tabulation
-        int[][] dp = new int[n][w+1];
+        // int[][] dp = new int[n][w+1];
+        // for(int i=wt[0];i<=w;i++)
+        //     dp[0][i] = val[0];
         
+        // for(int i=1;i<n;i++){
+        //     for(int j=0;j<=w;j++){
+        //         int notPick = dp[i-1][j];
+        //         int pick = Integer.MIN_VALUE;
+        //         if(wt[i]<=j)
+        //             pick = val[i]+dp[i-1][j-wt[i]];
+                    
+        //         dp[i][j] = Math.max(pick,notPick);
+        //     }
+        // }
+        // return dp[n-1][w];
         
+        // 3. Space Optimization
+        int[] prev = new int[w+1];
+        int[] curr = new int[w+1];
         
         for(int i=wt[0];i<=w;i++)
-            dp[0][i] = val[0];
+            prev[i] = val[0];
         
         for(int i=1;i<n;i++){
-            for(int j=0;j<=w;j++){
-                int notPick = dp[i-1][j];
+            for(int j=w;j>=0;j--){
+                int notPick = prev[j];
                 int pick = Integer.MIN_VALUE;
                 if(wt[i]<=j)
-                    pick = val[i]+dp[i-1][j-wt[i]];
+                    pick = val[i]+prev[j-wt[i]];
                     
-                dp[i][j] = Math.max(pick,notPick);
+                curr[j] = Math.max(pick,notPick);
             }
+            prev = curr;
         }
-        return dp[n-1][w];
-           
+        return prev[w];
     }
     
     static int recFunc(int ind,int w,int[] wt,int[] val,int[][] dp){
