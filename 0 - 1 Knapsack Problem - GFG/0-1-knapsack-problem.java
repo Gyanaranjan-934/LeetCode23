@@ -51,19 +51,43 @@ class Solution
     //Function to return max value that can be put in knapsack of capacity W.
     static int knapSack(int w, int wt[], int val[], int n) 
     {
+        // 1. Recursion + Memoization
+        // int[][] dp = new int[n][w+1];
+        // for(int[] row : dp)
+        //     Arrays.fill(row,-1);
+        // return recFunc(n-1,w,wt,val,dp);
+        
+        // 2. Tabulation
         int[][] dp = new int[n][w+1];
-        for(int[] row : dp)
-            Arrays.fill(row,-1);
-        return recFunc(n-1,w,wt,val,dp);
-    } 
+        
+        
+        
+        for(int i=wt[0];i<=w;i++)
+            dp[0][i] = val[0];
+        
+        for(int i=1;i<n;i++){
+            for(int j=0;j<=w;j++){
+                int notPick = dp[i-1][j];
+                int pick = Integer.MIN_VALUE;
+                if(wt[i]<=j)
+                    pick = val[i]+dp[i-1][j-wt[i]];
+                    
+                dp[i][j] = Math.max(pick,notPick);
+            }
+        }
+        return dp[n-1][w];
+           
+    }
     
     static int recFunc(int ind,int w,int[] wt,int[] val,int[][] dp){
-        if(ind<0)return 0;
+        if(ind<=0){
+            return wt[ind]<=w ? val[ind] : 0;
+        }
         
         if(dp[ind][w]!=-1)return dp[ind][w];
         
         int notPick = recFunc(ind-1,w,wt,val,dp);
-        int pick = 0;
+        int pick = Integer.MIN_VALUE;
         if(wt[ind]<=w)
             pick = val[ind]+recFunc(ind-1,w-wt[ind],wt,val,dp);
         
