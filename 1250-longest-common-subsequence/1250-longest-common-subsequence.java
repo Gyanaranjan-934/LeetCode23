@@ -1,11 +1,25 @@
 class Solution {
-    public int longestCommonSubsequence(String text1, String text2) {
+    public int longestCommonSubsequence(String s1, String s2) {
         // 1. Recursion + Memoization
-        int[][] dp = new int[text1.length()][text2.length()];
-        for(int[] row : dp)
-            Arrays.fill(row,-1);
-        return recFunc(text1.length()-1,text2.length()-1,text1,text2,dp);
+        // int[][] dp = new int[s1.length()][s2.length()];
+        // for(int[] row : dp)
+        //     Arrays.fill(row,-1);
+        // return recFunc(s1.length()-1,s2.length()-1,s1,s2,dp);
 
+        // 2. Tabulation
+        int n = s1.length()+1;
+        int m = s2.length()+1;
+        int[][] dp = new int[n][m];
+        
+        for(int i=1;i<n;i++){
+            for(int j=1;j<m;j++){
+                if(s1.charAt(i-1)==s2.charAt(j-1))
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                else
+                    dp[i][j] = Math.max(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+        return dp[n-1][m-1];
     }
 
     public int recFunc(int ind1,int ind2,String s1,String s2,int[][] dp){
