@@ -1,5 +1,8 @@
 class Solution {
     public int numDistinct(String s1, String s2) {
+        if (s1.length() < s2.length()) {
+            return 0;
+        }
         int n = s1.length();
         int m = s2.length();
         // int[][] dp = new int[n][m];
