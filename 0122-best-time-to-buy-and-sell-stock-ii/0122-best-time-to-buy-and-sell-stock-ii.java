@@ -25,24 +25,40 @@ class Solution {
         // }
         // return dp[0][1];
         
-        // Space Optimization
-        int[] prev = new int[2];
-        int[] curr = new int[2];
+        // Space Optimization 1
+        // int[] prev = new int[2];
+        // int[] curr = new int[2];
+        // for(int i=arr.length-1;i>=0;i--){
+        //     for(int j=0;j<=1;j++){
+        //         if(j==1){
+        //             int buyIt = -arr[i]+prev[0];
+        //             int notBuyIt = prev[1];
+        //             curr[j] = Math.max(buyIt,notBuyIt);
+        //         }else{
+        //             int sellIt = arr[i]+prev[1];
+        //             int notSellIt = prev[0];
+        //             curr[j] = Math.max(sellIt,notSellIt);
+        //         }
+        //     }
+        //     prev = (int[])(curr.clone());
+        // }
+        // return prev[1];
+
+        // Space Optimization 2
+
+        int aheadNotBuy = 0 , aheadBuy=0;
+        int currNotBuy = 0,currBuy = 0;
         for(int i=arr.length-1;i>=0;i--){
-            for(int j=0;j<=1;j++){
-                if(j==1){
-                    int buyIt = -arr[i]+prev[0];
-                    int notBuyIt = prev[1];
-                    curr[j] = Math.max(buyIt,notBuyIt);
-                }else{
-                    int sellIt = arr[i]+prev[1];
-                    int notSellIt = prev[0];
-                    curr[j] = Math.max(sellIt,notSellIt);
-                }
-            }
-            prev = (int[])(curr.clone());
+
+            currNotBuy = Math.max(arr[i]+aheadBuy,aheadNotBuy);
+            
+            currBuy = Math.max(-arr[i]+aheadNotBuy,aheadBuy);  
+
+            aheadBuy = currBuy;
+            aheadNotBuy=currNotBuy;
         }
-        return prev[1];
+        return aheadBuy;
+
     }
     public int recFunc(int ind,int[] arr,int buy,int[][] dp){
         if(ind==arr.length)return 0;
