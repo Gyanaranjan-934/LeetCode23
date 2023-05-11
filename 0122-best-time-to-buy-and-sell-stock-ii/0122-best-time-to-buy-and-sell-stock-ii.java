@@ -8,26 +8,41 @@ class Solution {
         // return recFunc(0,arr,1,dp);
 
         // 2. Tabulation
-        int[][] dp = new int[arr.length+1][2];
+        // int[][] dp = new int[arr.length+1][2];
         
+        // for(int i=arr.length-1;i>=0;i--){
+        //     for(int j=0;j<=1;j++){
+        //         if(j==1){
+        //             int buyIt = -arr[i]+dp[i+1][0];
+        //             int notBuyIt = dp[i+1][1];
+        //             dp[i][j] = Math.max(buyIt,notBuyIt);
+        //         }else{
+        //             int sellIt = arr[i]+dp[i+1][1];
+        //             int notSellIt = dp[i+1][0];
+        //             dp[i][j] = Math.max(sellIt,notSellIt);
+        //         }                
+        //     }
+        // }
+        // return dp[0][1];
+        
+        // Space Optimization
+        int[] prev = new int[2];
+        int[] curr = new int[2];
         for(int i=arr.length-1;i>=0;i--){
             for(int j=0;j<=1;j++){
                 if(j==1){
-                    int buyIt = -arr[i]+dp[i+1][0];
-                    int notBuyIt = dp[i+1][1];
-                    dp[i][j] = Math.max(buyIt,notBuyIt);
+                    int buyIt = -arr[i]+prev[0];
+                    int notBuyIt = prev[1];
+                    curr[j] = Math.max(buyIt,notBuyIt);
                 }else{
-                    int sellIt = arr[i]+dp[i+1][1];
-                    int notSellIt = dp[i+1][0];
-                    dp[i][j] = Math.max(sellIt,notSellIt);
+                    int sellIt = arr[i]+prev[1];
+                    int notSellIt = prev[0];
+                    curr[j] = Math.max(sellIt,notSellIt);
                 }
-                System.out.print(dp[i][j]+" ");
             }
-            System.out.println();
+            prev = (int[])(curr.clone());
         }
-        return dp[0][1];
-        
-
+        return prev[1];
     }
     public int recFunc(int ind,int[] arr,int buy,int[][] dp){
         if(ind==arr.length)return 0;
