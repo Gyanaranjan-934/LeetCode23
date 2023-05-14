@@ -31,21 +31,31 @@ class GFG
 class Solution{
     static int matrixMultiplication(int N, int arr[])
     {
-        int[][] dp = new int[N][N];
-        for(int[] row :dp)
-            Arrays.fill(row,-1);
-        return recFunc(1,N-1,arr,dp);
+        // int[][] dp = new int[N][N];
+        // for(int[] row :dp)
+        //     Arrays.fill(row,-1);
+        // return recFunc(1,N-1,arr,dp);
         
-        // int[][] dp = new int[N+1][N+1];
-        // int n = N;
-        //     for(int j=0;j<n;j++){
-        //         for(int i=n-1;i>=1;i--){
-        //             int mini = Integer.MAX_VALUE;
-        //             for(int k=1;j<j-1;k++){
-        //                 arr
-        //             }
-        //     }   
-        // }
+        int[][] dp = new int[N][N];
+        int n = N;
+            for(int i=n-1;i>=1;i--){
+                for(int j=i+1;j<n;j++){
+                   int mini = Integer.MAX_VALUE;
+        
+                    // partioning loop
+                    for(int k = i; k<= j-1; k++){
+                        
+                        int ans = dp[i][k]+ dp[k+1][j] + arr[i-1]*arr[k]*arr[j];
+                            
+                        mini = Math.min(mini,ans);
+                        
+                    }
+                    
+                    dp[i][j] = mini;
+            }   
+        }
+        
+        return dp[1][n-1];
         
     }
     static int recFunc(int i,int j,int[] arr,int[][] dp){
