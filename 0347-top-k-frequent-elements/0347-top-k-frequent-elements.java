@@ -8,14 +8,21 @@ class Pair{
 }
 class Solution {
     public int[] topKFrequent(int[] nums, int k) {
-        HashMap<Integer,Integer> map = new HashMap<>();
-        for(int i : nums){
-            map.put(i,map.getOrDefault(i,0)+1);
-        }
+        Arrays.sort(nums);
         PriorityQueue<Pair> pq = new PriorityQueue<Pair>((x,y)->y.freq-x.freq);
-        for(Map.Entry<Integer,Integer> entry : map.entrySet()){
-            pq.add(new Pair(entry.getKey(),entry.getValue()));
+        
+        int elem = nums[0];
+        int cnt = 1;
+        for(int i=1;i<nums.length;i++){
+            if(nums[i]==elem)cnt++;
+            else{
+                pq.add(new Pair(elem,cnt));
+                elem = nums[i];
+                cnt = 1;
+            }
         }
+        pq.add(new Pair(elem,cnt));
+        
         int[] res = new int[k];
         for(int i=0;i<k;i++)
             res[i] = pq.poll().val;
