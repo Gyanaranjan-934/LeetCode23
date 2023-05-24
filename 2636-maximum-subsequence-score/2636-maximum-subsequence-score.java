@@ -1,36 +1,33 @@
+class Pair{
+    int first;
+    int second;
+    Pair(int a,int b){
+        this.first = a;
+        this.second = b;
+    }
+}
 class Solution {
     public long maxScore(int[] nums1, int[] nums2, int k) {
-        // Sort pair (nums1[i], nums2[i]) by nums2[i] in decreasing order.
         int n = nums1.length;
-        int[][] pairs = new int[n][2];
-        for (int i = 0; i < n; ++i) {
-            pairs[i] = new int[]{nums1[i], nums2[i]};
+        ArrayList<Pair> list = new ArrayList<>();
+        for(int i=0;i<n;i++){
+            list.add(new Pair(nums2[i],nums1[i]));
         }
-        Arrays.sort(pairs, (a, b) -> b[1] - a[1]);
-
-        // Use a min-heap to maintain the top k elements.
-        PriorityQueue<Integer> topKHeap = new PriorityQueue<>();
-        long topKSum = 0;
-        for (int i = 0; i < k; ++i) {
-            topKSum += pairs[i][0];
-            topKHeap.add(pairs[i][0]);
+        Collections.sort(list,(x,y)->y.first-x.first);
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        long curr = 0;
+        long best = 0;
+        for(int i=0;i<n;i++){
+            pq.add(list.get(i).second);
+            curr += list.get(i).second;
+            if(pq.size()>k){
+                int mini = pq.peek();
+                pq.remove();
+                curr -= mini;
+            }
+            if(pq.size()==k)
+                best = Math.max(best,curr*list.get(i).first);
         }
-
-        // The score of the first k pairs.
-        long answer = topKSum * pairs[k - 1][1];
-
-        // Iterate over every nums2[i] as minimum from nums2.
-        for (int i = k; i < n; ++i) {
-            // Remove the smallest integer from the previous top k elements
-            // then add nums1[i] to the top k elements.
-            topKSum += pairs[i][0] - topKHeap.poll();
-            topKHeap.add(pairs[i][0]);
-
-            // Update answer as the maximum score.
-            answer = Math.max(answer, topKSum * pairs[i][1]);
-        }
-
-        return answer;
- 
+        return best;
     }
 }
