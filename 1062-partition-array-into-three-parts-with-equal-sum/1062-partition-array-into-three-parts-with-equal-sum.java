@@ -1,27 +1,20 @@
 class Solution {
-    
     public boolean canThreePartsEqualSum(int[] arr) {
-        for(int i=1;i<arr.length;i++){
-            arr[i]=arr[i]+arr[i-1];
-        }
-        int first = 0;
-        int second = 1;
-        int third = arr.length-1;
-        while(first<third-1){
-            int sum = arr[first];
-            second = first+1;
-            while(second<third){
-                if(arr[second]-arr[first]==sum){
-                    break;
-                }
-                else second++;
+        int sum =0;
+        for(int i:arr)sum+=i;
+
+        if(sum%3!=0)return false;
+
+        int x = sum/3;
+        sum=0;
+        int cnt=0;
+        for(int i:arr){
+            sum+=i;
+            if(sum==x){
+                cnt++;
+                sum=0;
             }
-            if(second!=third && arr[third]-arr[second]==sum){
-                // System.out.println(first+" "+second+" "+third);
-                return true;
-            }
-            first++;
         }
-        return false;
+        return cnt>=3;
     }
 }
