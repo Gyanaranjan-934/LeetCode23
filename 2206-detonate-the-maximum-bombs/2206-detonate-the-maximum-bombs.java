@@ -21,8 +21,8 @@ class Solution {
                     long r1 = bombs[i][2];
                     long x = bombs[j][0];
                     long y = bombs[j][1];
-                    long distanceSq = (x - x1) * (x - x1) + (y - y1) * (y - y1);
-                    if (distanceSq <= r1 * r1) {
+                    double distanceSq = Math.sqrt((x - x1) * (x - x1) + (y - y1) * (y - y1));
+                    if (distanceSq <= r1) {
                         gr.get(i).add(j);
                     }
                 }
