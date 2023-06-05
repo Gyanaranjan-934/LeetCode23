@@ -1,55 +1,58 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 class Solution {
-    private ArrayList<int[]> merge(ArrayList<int[]> list){
-        ArrayList<int[]> res = new ArrayList<int[]>();
-        int mini = list.get(0)[0];
-        int maxi = list.get(0)[1];
-
-        for(int i=1;i<list.size();i++){
-            int newMini = list.get(i)[0];
-            int newMaxi = list.get(i)[1];
-
-            if(newMini <= maxi){
-                maxi = Math.max(maxi,newMaxi);
-            }else{
-                res.add(new int[]{mini,maxi});
-                mini = newMini;
-                maxi = newMaxi;
+    private List<int[]> merge(List<int[]> list) {
+        LinkedList<int[]> merged = new LinkedList<>();
+        for (int[] interval : list) {
+            if (merged.isEmpty() || merged.getLast()[1] < interval[0]) {
+                merged.add(interval);
+            } else {
+                merged.getLast()[1] = Math.max(merged.getLast()[1], interval[1]);
             }
         }
-        res.add(new int[]{mini,maxi});
-        return res;
+        return merged;
     }
-    private void addInterval(int[] newInterval,ArrayList<int[]> list){
-        int low = 0;
-        int high = list.size()-1;
-        while(low<=high){
-            int mid = low + (high-low)/2;
-            if(list.get(mid)[0]==newInterval[0]){
-                list.add(mid,newInterval);
-                return ;
-            }else if(list.get(mid)[0]<newInterval[0])low=mid+1;
-            else high=mid-1;
-        }
-        list.add(low,newInterval);
-        return ;
-    }
+
     public int[][] insert(int[][] intervals, int[] newInterval) {
-        ArrayList<int[]> list = new ArrayList<>();
-        for(int[] row:intervals)
+        List<int[]> list = new ArrayList<>();
+        for (int[] row : intervals) {
             list.add(row);
+        }
 
-        // list.add(newInterval);
-        // Collections.sort(list,(x,y)->x[0]-y[0]);
+        if (list.isEmpty() || list.get(list.size() - 1)[1] < newInterval[0]) {
+            list.add(newInterval);
+        } else {
+            addInterval(newInterval, list);
+        }
 
-        addInterval(newInterval,list);
+        List<int[]> mergedIntervals = merge(list);
 
-        ArrayList<int[]> tempRes = merge(list);
-        int[][] res = new int[tempRes.size()][2];
-        for(int i=0;i<res.length;i++){
-            res[i][0]=tempRes.get(i)[0];
-            res[i][1]=tempRes.get(i)[1];
+        int[][] res = new int[mergedIntervals.size()][2];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = mergedIntervals.get(i);
         }
 
         return res;
+    }
+
+    private void addInterval(int[] newInterval, List<int[]> list) {
+        int low = 0;
+        int high = list.size() - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (list.get(mid)[0] == newInterval[0]) {
+                list.add(mid, newInterval);
+                return;
+            } else if (list.get(mid)[0] < newInterval[0]) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        list.add(low, newInterval);
     }
 }
