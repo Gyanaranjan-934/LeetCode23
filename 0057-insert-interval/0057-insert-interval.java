@@ -19,13 +19,29 @@ class Solution {
         res.add(new int[]{mini,maxi});
         return res;
     }
+    private void addInterval(int[] newInterval,ArrayList<int[]> list){
+        int low = 0;
+        int high = list.size()-1;
+        while(low<=high){
+            int mid = low + (high-low)/2;
+            if(list.get(mid)[0]==newInterval[0]){
+                list.add(mid,newInterval);
+                return ;
+            }else if(list.get(mid)[0]<newInterval[0])low=mid+1;
+            else high=mid-1;
+        }
+        list.add(low,newInterval);
+        return ;
+    }
     public int[][] insert(int[][] intervals, int[] newInterval) {
         ArrayList<int[]> list = new ArrayList<>();
         for(int[] row:intervals)
             list.add(row);
 
-        list.add(newInterval);
-        Collections.sort(list,(x,y)->x[0]-y[0]);
+        // list.add(newInterval);
+        // Collections.sort(list,(x,y)->x[0]-y[0]);
+
+        addInterval(newInterval,list);
 
         ArrayList<int[]> tempRes = merge(list);
         int[][] res = new int[tempRes.size()][2];
