@@ -1,58 +1,34 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 class Solution {
-    private List<int[]> merge(List<int[]> list) {
-        LinkedList<int[]> merged = new LinkedList<>();
-        for (int[] interval : list) {
-            if (merged.isEmpty() || merged.getLast()[1] < interval[0]) {
-                merged.add(interval);
-            } else {
-                merged.getLast()[1] = Math.max(merged.getLast()[1], interval[1]);
-            }
-        }
-        return merged;
-    }
-
     public int[][] insert(int[][] intervals, int[] newInterval) {
-        List<int[]> list = new ArrayList<>();
-        for (int[] row : intervals) {
-            list.add(row);
+        List<int[]> mergedIntervals = new ArrayList<>();
+        int i = 0;
+
+        // Add intervals before newInterval that end before newInterval starts
+        while (i < intervals.length && intervals[i][1] < newInterval[0]) {
+            mergedIntervals.add(intervals[i]);
+            i++;
         }
 
-        if (list.isEmpty() || list.get(list.size() - 1)[1] < newInterval[0]) {
-            list.add(newInterval);
-        } else {
-            addInterval(newInterval, list);
+        // Merge intervals that overlap with newInterval
+        while (i < intervals.length && intervals[i][0] <= newInterval[1]) {
+            newInterval[0] = Math.min(intervals[i][0], newInterval[0]);
+            newInterval[1] = Math.max(intervals[i][1], newInterval[1]);
+            i++;
         }
 
-        List<int[]> mergedIntervals = merge(list);
+        // Add the merged newInterval
+        mergedIntervals.add(newInterval);
 
-        int[][] res = new int[mergedIntervals.size()][2];
-        for (int i = 0; i < res.length; i++) {
-            res[i] = mergedIntervals.get(i);
+        // Add remaining intervals
+        while (i < intervals.length) {
+            mergedIntervals.add(intervals[i]);
+            i++;
         }
 
-        return res;
-    }
-
-    private void addInterval(int[] newInterval, List<int[]> list) {
-        int low = 0;
-        int high = list.size() - 1;
-
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-            if (list.get(mid)[0] == newInterval[0]) {
-                list.add(mid, newInterval);
-                return;
-            } else if (list.get(mid)[0] < newInterval[0]) {
-                low = mid + 1;
-            } else {
-                high = mid - 1;
-            }
-        }
-
-        list.add(low, newInterval);
+        // Convert mergedIntervals list to a 2D array and return
+        return mergedIntervals.toArray(new int[mergedIntervals.size()][]);
     }
 }
