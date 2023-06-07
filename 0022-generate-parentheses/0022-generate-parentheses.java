@@ -4,7 +4,7 @@ class Solution {
             res.add(temp);
             return;
         }
-        if(countOpen>=0)
+        if(countOpen>0)
             recFunc(countOpen-1,countClose,temp+"(",res);
         
         if(countClose>countOpen)
