@@ -6,13 +6,13 @@ class Solution {
         int j = m-1;
         int cnt = 0;
         while(i<n && j>=0){
-            if(grid[i][j]<0)
+            if(grid[i][j]<0){
                 cnt+= (n-i);
+                j--;
+            }
             else{
                 i++;
-                continue;
             }
-            j--;
         }
         return cnt;
     }
