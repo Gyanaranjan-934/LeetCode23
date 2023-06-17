@@ -9,21 +9,39 @@ class Solution {
         }
         return dp[ind] = res;
     }
-    public int jump(int[] nums) {
-        int[] dp = new int[nums.length];
-        // Arrays.fill(dp,-1);
-        // return recFunc(0,nums,dp);
+    // public int jump(int[] nums) {
+    //     int[] dp = new int[nums.length];
+    //     // Arrays.fill(dp,-1);
+    //     // return recFunc(0,nums,dp);
 
-        for(int ind=nums.length-2;ind>=0;ind--){
-            int res = (int)1e7;
-            for(int i=1;i<=nums[ind];i++){
-                if(ind+i<=nums.length-1){
-                    int temp = 1+recFunc(ind+i,nums,dp);
-                    res = Math.min(res,temp);
-                }
+    //     for(int ind=nums.length-2;ind>=0;ind--){
+    //         int res = (int)1e7;
+    //         for(int i=1;i<=nums[ind];i++){
+    //             if(ind+i<=nums.length-1){
+    //                 int temp = 1+recFunc(ind+i,nums,dp);
+    //                 res = Math.min(res,temp);
+    //             }
+    //         }
+    //         dp[ind] = res;
+    //     }
+    //     return dp[0];
+    // }
+    public int jump(int[] nums) {
+        int n = nums.length;
+        int farthest = 0;
+        int end = 0;
+        int jumps = 0;
+
+        for (int i = 0; i < n - 1; i++) {
+            farthest = Math.max(farthest, i + nums[i]);
+
+            if (i == end) {
+                end = farthest;
+                jumps++;
             }
-            dp[ind] = res;
         }
-        return dp[0];
+
+        return jumps;
     }
+
 }
