@@ -11,7 +11,19 @@ class Solution {
     }
     public int jump(int[] nums) {
         int[] dp = new int[nums.length];
-        Arrays.fill(dp,-1);
-        return recFunc(0,nums,dp);
+        // Arrays.fill(dp,-1);
+        // return recFunc(0,nums,dp);
+
+        for(int ind=nums.length-2;ind>=0;ind--){
+            int res = (int)1e7;
+            for(int i=1;i<=nums[ind];i++){
+                if(ind+i<=nums.length-1){
+                    int temp = 1+recFunc(ind+i,nums,dp);
+                    res = Math.min(res,temp);
+                }
+            }
+            dp[ind] = res;
+        }
+        return dp[0];
     }
 }
