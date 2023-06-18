@@ -13,12 +13,12 @@ class Solution {
                 minDay=0;
             }
         }
-        if(minDay>=k)subArrCnt++;
-        // System.out.println(day+"->"+subArrCnt);
+        
+        
         return subArrCnt>=m;
     }
     public int minDays(int[] arr, int m, int k) {
-        // System.out.println(m*k);
+        
         if((long)m*(long)k>(long)arr.length){
             return -1;
         }
