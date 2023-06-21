@@ -69,6 +69,6 @@ class Solution{
                
                 }
             }
-        return strs[0].length()>0 ? strs[0] : "-1";
+        return strs[0];
     }
 }
