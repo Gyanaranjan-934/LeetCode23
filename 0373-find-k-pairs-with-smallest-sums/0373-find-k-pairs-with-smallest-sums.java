@@ -1,40 +1,36 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
-
+class Tuple{
+    int val;
+    int rInd;
+    int cInd;
+    Tuple(int a,int b,int c){
+        this.val = a;
+        this.rInd = b;
+        this.cInd = c;
+    }
+}
 class Solution {
     public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
-        PriorityQueue<List<Integer>> pq = new PriorityQueue<>((a, b) -> (a.get(0) + a.get(1)) - (b.get(0) + b.get(1)));
+        int m = nums1.length;
+        int n = nums2.length;
         List<List<Integer>> res = new ArrayList<>();
+
+        PriorityQueue<Tuple> pq = new PriorityQueue<>((x,y)->x.val-y.val);
         
-        if (nums1.length == 0 || nums2.length == 0 || k == 0) {
-            return res;
+        for(int i=0;i<m;i++){
+            pq.add(new Tuple(nums1[i]+nums2[0],i,0));
         }
-        
-        for (int i = 0; i < nums1.length && i < k; i++) {
-            List<Integer> pair = new ArrayList<>();
-            pair.add(nums1[i]);
-            pair.add(nums2[0]);
-            pair.add(0);
-            pq.offer(pair);
-        }
-        
-        while (k-- > 0 && !pq.isEmpty()) {
-            List<Integer> cur = pq.poll();
-            res.add(cur.subList(0, 2));
-            
-            int nextIndex = cur.get(2) + 1;
-            if (nextIndex == nums2.length) {
-                continue;
+        while(!pq.isEmpty() && res.size()<k){
+            Tuple t = pq.poll();
+            int rInd = t.rInd;
+            int cInd = t.cInd;
+            List<Integer> temp = new ArrayList<>();
+            temp.add(nums1[rInd]);
+            temp.add(nums2[cInd]);
+            res.add(temp);
+            if(cInd<n-1){
+                pq.add(new Tuple(nums1[rInd]+nums2[cInd+1],rInd,cInd+1));
             }
-            
-            List<Integer> nextPair = new ArrayList<>();
-            nextPair.add(cur.get(0));
-            nextPair.add(nums2[nextIndex]);
-            nextPair.add(nextIndex);
-            pq.offer(nextPair);
         }
-        
         return res;
     }
 }
