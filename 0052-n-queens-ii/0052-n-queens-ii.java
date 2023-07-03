@@ -1,11 +1,11 @@
 class Solution {
-    private boolean isSafe(int row, int col, List<char[]> list) {
+    private boolean isSafe(int row, int col, int[][] list) {
         int drow = row;
         int dcol = col;
 
         // Check top-left diagonal
         while (row >= 0 && col >= 0) {
-            if (list.get(row)[col] == 'Q') return false;
+            if (list[row][col] == 1) return false;
             row--;
             col--;
         }
@@ -14,15 +14,15 @@ class Solution {
         row = drow;
         col = dcol;
         while (row >= 0) {
-            if (list.get(row)[col] == 'Q') return false;
+            if (list[row][col] == 1) return false;
             row--;
         }
 
         // Check top-right diagonal
         row = drow;
         col = dcol;
-        while (row >= 0 && col < list.size()) {
-            if (list.get(row)[col] == 'Q') return false;
+        while (row >= 0 && col < list.length) {
+            if (list[row][col] == 1) return false;
             row--;
             col++;
         }
@@ -30,30 +30,25 @@ class Solution {
         return true;
     }
 
-    private void recFunc(int ind, int n, List<char[]> list, int[] res) {
+    private int recFunc(int ind, int n, int[][] list) {
         if (ind == n) {
-            res[0]++;
-            return;
+            return 1;
         }
-
+        int ans = 0;
         for (int i = 0; i < n; i++) {
             if (isSafe(ind, i, list)) {
-                list.get(ind)[i] = 'Q';
-                recFunc(ind + 1, n, list, res);
-                list.get(ind)[i] = '.';
+                list[ind][i] = 1;
+                ans += recFunc(ind + 1, n, list);
+                list[ind][i] = 0;
             }
         }
+        return ans;
     }
 
     public int totalNQueens(int n) {
-        int[] res = new int[1];
-        List<char[]> list = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            char[] arr = new char[n];
-            Arrays.fill(arr, '.');
-            list.add(arr);
-        }
-        recFunc(0, n, list, res);
-        return res[0];
+        
+        int[][] list = new int[n][n];
+        return recFunc(0, n, list);
+        
     }
 }
