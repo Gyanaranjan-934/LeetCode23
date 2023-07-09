@@ -1,43 +1,38 @@
 class Solution {
     public int largestVariance(String s) {
-	    // Maintain a map of freq of characters in the string
-        Map<Character, Integer> map = new HashMap<>();
-        for(char c : s.toCharArray())
-            map.put(c, map.getOrDefault(c, 0) + 1);
+        int[] freq = new int[26];
+        for(int i=0;i<s.length();i++){
+            freq[s.charAt(i)-'a']++;
+        }
+        int ans = 0;
         
-        int max=0;
-		// Check for every possible pair of characters in the map with the assumption that the one char is greater than the other
-		// In the following piece of code, assuming c2 count is greater than c1
-        for(char c1 : map.keySet()){
-            for(char c2 : map.keySet()){
-			    // If both the characters are same then we don't explore any further
-                if(c1 == c2)
-                    continue;
-                int c1Freq=0, c2Freq=0;
-                int c1Remaining=map.get(c1); // Keep track of the remaining c1 chars
-				
-				// Iterate through all the characters in the string
-                for(char c : s.toCharArray()){
-                    if(c == c1){
-                        c1Freq++;
-                        c1Remaining--;
-                    }
-                    if(c == c2)
-                        c2Freq++;
+        for(char ch1='a';ch1<='z';ch1++){
+            for(char ch2='a';ch2<='z';ch2++){
 
-					// If c2-count < c1-count then we reset the counters, only if we know there are more c1 chars to come in the iteration
-					// c1Remaining check is required for the test case "baa" and c1=b && c2=a. We don't reset the counters if there are no more c1 chars left					
-                    if(c2Freq < c1Freq && c1Remaining > 0) {
-                        c2Freq=0;
-                        c1Freq=0;
+                if(ch1==ch2 || freq[ch1-'a']==0 || freq[ch2-'a']==0)continue;
+
+                for(int cnt=0;cnt<2;cnt++){
+                    int cnt1 = 0,cnt2=0;
+                    for(int i=0;i<s.length();i++){
+                        if(s.charAt(i)==ch1)cnt1++;
+                        if(s.charAt(i)==ch2)cnt2++; 
+
+                        if(cnt1<cnt2){
+                            cnt1=0;
+                            cnt2=0;
+                        }
+
+                        if(cnt1>0 && cnt2>0){
+                            ans = Math.max(ans,cnt1-cnt2);
+                        }
                     }
-                    
-					// Calculate variance of current substring and update max accordingly
-                    if(c1Freq > 0 && c2Freq > 0)
-                        max = Math.max(max, c2Freq-c1Freq);
+                    StringBuffer strBfr = new StringBuffer(s);
+                    strBfr.reverse();
+                    s = strBfr.toString();
                 }
+
             }
         }
-        return max;
+        return ans;
     }
 }
