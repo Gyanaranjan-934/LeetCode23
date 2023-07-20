@@ -62,19 +62,20 @@ class GFG {
 
 
 class Solution {
-    private static void recFunc(int ind,int[] arr,int l,int r,long sum,long[] res){
-        if(ind<0){
-            if(sum>=l && sum<=r)res[0]++;
-            return;
+    private static int recFunc(int ind, int[] arr, int l, int r, long sum) {
+        if (ind < 0) {
+            return (sum >= l && sum <= r) ? 1 : 0;
         }
+
+        int includeCount = recFunc(ind - 1, arr, l, r, sum + (long) arr[ind]);
+        int excludeCount = recFunc(ind - 1, arr, l, r, sum);
         
-        recFunc(ind-1,arr,l,r,sum+(long)arr[ind],res);
-        recFunc(ind-1,arr,l,r,sum,res);
+        return includeCount + excludeCount;
     }
-    public static long countSubsets(int n, int[] arr, int l, int r) {
-        long[] res = new long[1];
-        recFunc(n-1,arr,l,r,0,res);
-        return res[0];
+
+    public static int countSubsets(int n, int[] arr, int l, int r) {
+        return recFunc(n - 1, arr, l, r, 0);
     }
 }
+
         
