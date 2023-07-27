@@ -1,17 +1,17 @@
 class Solution {
-    private boolean isPossible(int n,int[] arr,long mid){
-        int ptr = arr.length-1;
-        while(ptr>=0 && arr[ptr]>=mid && n>0){
-            ptr--;
-            n--;
+    boolean isPossible( int computers,int[] batteries,long time) {
+        long totTime = 0;
+
+        for (long bTime : batteries) {
+            if (bTime < time)
+                totTime += bTime;
+            else
+                totTime += time;
         }
-        if(n==0)return true;
-        if(ptr+1 > n){
-            long totsum = 0;
-            while(ptr>=0)totsum+=arr[ptr--];
-            return totsum>=mid*(long)n;
-        }else return false;
+
+        return (totTime >= time * computers);
     }
+
     public long maxRunTime(int n, int[] batteries) {
         Arrays.sort(batteries);
         long low = 1;
