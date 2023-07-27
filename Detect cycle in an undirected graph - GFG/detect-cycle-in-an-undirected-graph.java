@@ -29,68 +29,51 @@ class GFG {
         }
     }
 }
-// } Driver Code Endshttps://practice.geeksforgeeks.org/contest/job-a-thon-20-hiring-challenge
+// } Driver Code Ends
 
-// class Solution {
-//     // Function to detect cycle in an undirected graph.
-//     public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
-//         int[] parent = new int[V];
-//         Arrays.fill(parent,-1);
-//         boolean[] visited = new boolean[V];
-//         Arrays.fill(visited,false);
-//         for(int i=0;i<V;i++){
-//             if(!visited[i]){
-//                 int k = bfs(i,visited,parent,adj);
-//                 if(k==1)return true;
-//             }
-//         }
-//         return false;
-//     }
-//     public int bfs(int ind,boolean[] visited,int[] parent,ArrayList<ArrayList<Integer>> adj){
-//         Queue<Integer> q = new LinkedList<>();
-//         q.add(ind);
-//         visited[ind]=true;
-//         while(!q.isEmpty()){
-//             int k = q.remove();
-//             int pt = parent[k];
-//             for(int i :adj.get(k)){
-//                 if(!visited[i]){
-//                     visited[i]=true;
-//                     parent[i]=k;                
-//                     q.add(i);
-//                 }
-//                 else if(i!=pt)return 1;
-//             }
-            
-//         }
-//         return 0;
-//     }
-// }
-class Solution {
-    // Function to detect cycle in an undirected graph.
-    private boolean dfs(int node, int parent, int vis[], ArrayList<ArrayList<Integer>> 
-    adj) {
-        vis[node] = 1; 
-        // go to all adjacent nodes
-        for(int adjacentNode: adj.get(node)) {
-            if(vis[adjacentNode]==0) {
-                if(dfs(adjacentNode, node, vis, adj) == true) 
-                    return true; 
-            }
-            // if adjacent node is visited and is not its own parent node
-            else if(adjacentNode != parent) return true; 
-        }
-        return false; 
-    }
-    // Function to detect cycle in an undirected graph.
-    public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
-       int vis[] = new int[V]; 
-       for(int i = 0;i<V;i++) {
-           if(vis[i] == 0) {
-               if(dfs(i, -1, vis, adj) == true) return true; 
-           }
-       }
-       return false; 
+
+
+class Pair{
+    int val;
+    int parent;
+    Pair(int a,int b){
+        this.val = a;
+        this.parent = b;
     }
 }
 
+class Solution {
+    private boolean bfs(int src,Queue<Pair> q,HashSet<Integer> visited,ArrayList<ArrayList<Integer>> adj){
+        // Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(src,-1));
+        
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            visited.add(p.val);
+            for(int i: adj.get(p.val)){
+                if(visited.contains(i)){
+                    if(i!=p.parent)return true;
+                }
+                else q.add(new Pair(i,p.val));
+            }
+        }
+        return false;
+    }
+
+    public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
+        HashSet<Integer> visited = new HashSet<>();
+        Queue<Pair> q = new LinkedList<>();
+        
+        
+        for(int i=0;i<V;i++){
+            if(!visited.contains(i)){
+                // System.out.println(q.isEmpty());
+                q.clear();
+                boolean res = bfs(i,q,visited,adj);
+                if(res==true)return true;
+            }
+        }
+        return false;
+        
+    }
+}
