@@ -1,43 +1,39 @@
 class Solution {
-    public void solve(char[][] mat) {
-        int n = mat.length;
-        int m = mat[0].length;
+    private void dfs(int sr,int sc,char[][] board){
+        board[sr][sc] = 'P';
         int[] drow = {-1,0,1,0};
         int[] dcol = {0,1,0,-1};
+
+        int n = board.length;
+        int m = board[0].length;
+
+        for(int i=0;i<4;i++){
+            int nrow = sr + drow[i];
+            int ncol = sc + dcol[i];
+
+            if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && board[nrow][ncol]=='O')
+                dfs(nrow,ncol,board);
+        }
+    }
+    public void solve(char[][] board) {
+        int n = board.length;
+        int m = board[0].length;
         for(int i=0;i<n;i++){
-            if(mat[i][0]=='O'){
-                dfs(i,0,mat,drow,dcol);
-            }
-            if(mat[i][m-1]=='O'){
-                dfs(i,m-1,mat,drow,dcol);
-            }
+            if(board[i][0]=='O')dfs(i,0,board);
+            if(board[i][m-1]=='O')dfs(i,m-1,board);
         }
         for(int i=0;i<m;i++){
-            if(mat[0][i]=='O'){
-                dfs(0,i,mat,drow,dcol);
-            }
-            if(mat[n-1][i]=='O'){
-                dfs(n-1,i,mat,drow,dcol);
-            }
+            if(board[0][i]=='O')dfs(0,i,board);
+            if(board[n-1][i]=='O')dfs(n-1,i,board);
         }
+
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
-                if(mat[i][j]=='P')mat[i][j]='O';
-                else if(mat[i][j]=='O')mat[i][j]='X';
+                if(board[i][j]=='P')board[i][j]='O';
+                else if(board[i][j]=='O')board[i][j]='X';
             }
         }
-        
-    }
-    private void dfs(int r,int c,char[][] mat,int[] drow,int[] dcol){
-        mat[r][c]='P';
-        int n = mat.length;
-        int m = mat[0].length;
-        for(int i=0;i<4;i++){
-            int nrow = r + drow[i];
-            int ncol = c + dcol[i];
-            if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && mat[nrow][ncol]=='O'){
-                dfs(nrow,ncol,mat,drow,dcol);
-            }
-        }
+
+        // return boar
     }
 }
