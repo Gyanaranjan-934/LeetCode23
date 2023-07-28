@@ -59,6 +59,16 @@ class Solution {
         }
         return false;
     }
+    
+    private boolean dfs(int src,int parent,HashSet<Integer> visited,ArrayList<ArrayList<Integer>> adj){
+        visited.add(src);
+        for(int i: adj.get(src)){
+            if(!visited.contains(i)){
+                if(dfs(i,src,visited,adj))return true;
+            }else if(i!=parent)return true;
+        }
+        return false;
+    }
 
     public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
         HashSet<Integer> visited = new HashSet<>();
@@ -68,8 +78,9 @@ class Solution {
         for(int i=0;i<V;i++){
             if(!visited.contains(i)){
                 // System.out.println(q.isEmpty());
-                q.clear();
-                boolean res = bfs(i,q,visited,adj);
+                // q.clear();
+                // boolean res = bfs(i,q,visited,adj);
+                boolean res = dfs(i,-1,visited,adj);
                 if(res==true)return true;
             }
         }
