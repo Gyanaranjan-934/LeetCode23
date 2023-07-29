@@ -14,15 +14,14 @@ class Solution {
             if(nums[j]==1)cnt++;
             else{
                 if(zeroCnt==0){
-                    // cnt++;
                     zeroCnt=1;
                     zeroInd = j;
                 }else{
                     maxi = Math.max(maxi,cnt);
                     cnt=0;
                     i=zeroInd;
-                    // while(i<n && )
-                    j=i;
+                    while(i<n && nums[i]==0)i++;
+                    j=i-1;
                     zeroCnt=0;
                 }
             }
