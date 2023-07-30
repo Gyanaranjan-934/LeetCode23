@@ -1,13 +1,14 @@
 class Solution {
-    private int recFunc(int start,int end,char[] arr,int[][] dp){
-        if(start==end)return 1;
-        if(dp[start][end]!=-1)return dp[start][end];
-
-        int res = 101;
-        for(int i=start;i<end;i++){
-            res = Math.min(res,recFunc(start,i,arr,dp)+recFunc(i+1,end,arr,dp));
+    private int recFunc(int i,int j,char[] arr,int[][] dp){
+        if(i==j)return 1;
+        // if(i>j)return 0;
+        if(dp[i][j]!=-1)return dp[i][j];
+        int cnt = Integer.MAX_VALUE;
+        for(int k=i;k<j;k++){
+            int temp = recFunc(i,k,arr,dp) + recFunc(k+1,j,arr,dp);
+            cnt = Math.min(cnt,temp);
         }
-        return dp[start][end]=arr[start]==arr[end]? res-1:res;
+        return dp[i][j]=arr[i]==arr[j]?cnt-1:cnt;
     }
     private String setCompressed(String s){
         String res = "";
