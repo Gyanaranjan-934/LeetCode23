@@ -129,21 +129,27 @@ class Solution
         while(root.left!=null)root=root.left;
         return root;
     }
+    private Node findSucc(Node ptr,Node prev,Node x){
+        if(x==ptr)return prev;
+        if(ptr.data>x.data)return findSucc(ptr.left,ptr,x);
+        return findSucc(ptr.right,prev,x);
+    }
     
     // returns the inorder successor of the Node x in BST (rooted at 'root')
 	public Node inorderSuccessor(Node root,Node x)
         {
             if(x.right!=null)return findLeftMost(x.right);
-            Node prev = null;
-            Node ptr = root;
-            while(ptr!=x){
-                if(ptr.data>x.data){
-                    prev=ptr;
-                    ptr=ptr.left;
-                }else{
-                    ptr=ptr.right;
-                }
-            }
-            return prev;
+            // Node prev = null;
+            // Node ptr = root;
+            // while(ptr!=x){
+            //     if(ptr.data>x.data){
+            //         prev=ptr;
+            //         ptr=ptr.left;
+            //     }else{
+            //         ptr=ptr.right;
+            //     }
+            // }
+            // return prev;
+            return findSucc(root,null,x);
         }
 }
