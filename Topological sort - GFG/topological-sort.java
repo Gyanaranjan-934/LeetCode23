@@ -15,7 +15,7 @@ class Main {
             int edg = Integer.parseInt(st[0]);
             int nov = Integer.parseInt(st[1]);
 
-            for (int i = 0; i < nov + 1; i++)
+            for (int i = 0; i < nov; i++)
                 list.add(i, new ArrayList<Integer>());
 
             int p = 0;
@@ -57,82 +57,28 @@ class Main {
 
 /*Complete the function below*/
 
-// ...............Using DFS..............
-// class Solution
-// {
-//     //Function to return list containing vertices in Topological order. 
-//     static int[] topoSort(int V, ArrayList<ArrayList<Integer>> adj) 
-//     {
-//         int[] res = new int[V];
-//         Stack<Integer> s = new Stack<>();
-        
-//         int[] visited = new int[V];
-        
-//         for(int i=0;i<V;i++){
-//             if(visited[i]==0){
-//                 dfs(i,visited,s,adj);
-//                 s.push(i);
-//             }
-//         }
-//         int k = 0;
-//         while(!s.isEmpty()){
-//             res[k++] = s.pop();
-//         }
-        
-        
-//         return res;
-//     }
-    
-//     static void dfs(int ind,int[] visited,Stack<Integer> s,ArrayList<ArrayList<Integer>> adj){
-//         visited[ind]=1;
-//         for(int i:adj.get(ind)){
-//             if(visited[i]==0){
-//                 dfs(i,visited,s,adj);
-//                 s.push(i);
-//             }
-//         }
-//     }
-    
-// }
-
-// ....................Using BFS{Kahn's Algorithm) .......................
 
 class Solution
 {
-    public static void calcIndeg(ArrayList<ArrayList<Integer>> adj, int[] indeg) {
-        for(int i=0; i<adj.size(); i++) {
-            for(int j=0; j<adj.get(i).size(); j++) {
-                indeg[adj.get(i).get(j)]++;
-            }
-        }
+    static void dfs(int src,ArrayList<ArrayList<Integer>> adj,boolean[] visited,Stack<Integer> stk){
+        visited[src]=true;
+        for(int i : adj.get(src))
+            if(!visited[i])dfs(i,adj,visited,stk);
+            
+        stk.push(src);
     }
+    
     //Function to return list containing vertices in Topological order. 
     static int[] topoSort(int V, ArrayList<ArrayList<Integer>> adj) 
     {
-        // add your code here
-        int[] ans = new int[V];
-        int idx = 0;
+        Stack<Integer> stk = new Stack<>();
+        boolean[] visited = new boolean[V];
+        for(int i=0;i<V;i++){
+            if(!visited[i])dfs(i,adj,visited,stk);
+        }
         
-        int[] indeg = new int[V];
-        calcIndeg(adj, indeg);
-        Queue<Integer> q = new LinkedList<>();
-
-        for(int i=0; i<indeg.length; i++) {
-            if(indeg[i] == 0)
-                q.add(i);
-        }
-
-        // bfs
-        while(!q.isEmpty()) {
-            int curr = q.remove();
-            ans[idx++] = curr;
-
-            for(int i=0; i<adj.get(curr).size(); i++) {
-                indeg[adj.get(curr).get(i)]--;
-                if(indeg[adj.get(curr).get(i)] == 0)
-                    q.add(adj.get(curr).get(i));
-            }
-        }
-        return ans;
+        int[] res = new int[V];
+        for(int i=0;i<V;i++)res[i]=stk.pop();
+        return res;
     }
 }
