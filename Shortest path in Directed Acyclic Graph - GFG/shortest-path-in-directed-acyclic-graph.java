@@ -28,11 +28,11 @@ class Main {
 // } Driver Code Ends
 
 class Pair{
-    int node;
+    int val;
     int dist;
-    Pair(int a,int b){
-        this.node = a;
-        this.dist = b;
+    Pair(int val,int dist){
+        this.val = val;
+        this.dist = dist;
     }
 }
 
@@ -40,51 +40,33 @@ class Pair{
 class Solution {
 
 	public int[] shortestPath(int n,int m, int[][] edges) {
+	    ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+	    for(int i=0;i<n;i++){
+	        adj.add(new ArrayList<Pair>());
+	    }
+	    for(int[] row : edges){
+	        adj.get(row[0]).add(new Pair(row[1],row[2]));
+	    }
 	    
-		ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
-		for(int i=0;i<n;i++){
-		    adj.add(new ArrayList<Pair>());
-		}
-		
-		for(int[] edge : edges){
-		    int u = edge[0];
-		    int v = edge[1];
-		    int wt = edge[2];
-		    
-		    adj.get(u).add(new Pair(v,wt));
-		}
-		
-		int[] dist = new int[n];
-		Arrays.fill(dist,Integer.MAX_VALUE);
-		
-		dist[0] = 0;
-		
-		Queue<Integer> q = new LinkedList<>();
-		q.add(0);
-		
-		while(!q.isEmpty()){
-		    int sNode = q.remove();
-		    int sDist = dist[sNode];
-		    
-		    for(Pair p : adj.get(sNode)){
-		        int i = p.node;
-		        int oDist = p.dist;
-		        
-		        int nDist = sDist + oDist;
-		        if(nDist<dist[i]){
-		            dist[i] = nDist;
-		            q.add(i);
-		        }
-		        
-		    }
-		    
-		}
-		
-		for(int i=0;i<n;i++){
-		    if(dist[i]==Integer.MAX_VALUE)dist[i] = -1;
-		}
-		
-		return dist;
-		
+	    Queue<Pair> q = new LinkedList<>();
+	    int[] dist = new int[n];
+	    Arrays.fill(dist,Integer.MAX_VALUE);
+	    dist[0] = 0;
+	    q.add(new Pair(0,0));
+	    while(!q.isEmpty()){
+	        Pair temp = q.poll();
+	        for(Pair p : adj.get(temp.val)){
+	            if(dist[p.val] > dist[temp.val]+p.dist){
+	                dist[p.val] = dist[temp.val]+p.dist;
+	                q.add(p);
+	            }
+	        }
+	    }
+	    
+	    for(int i=0;i<n;i++){
+	        if(dist[i]==Integer.MAX_VALUE)dist[i]=-1;
+	    }
+	    
+	    return dist;
 	}
 }
