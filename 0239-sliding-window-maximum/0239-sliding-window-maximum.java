@@ -11,7 +11,7 @@ class Solution {
         for (int i = 0; i < n; ++i) {
             // remove indices that are out of bound
             while (win.size() > 0 && win.peekFirst() <= i - k) {
-            win.pollFirst();
+                win.pollFirst();
             }
             // remove indices whose corresponding values are less than nums[i]
             while (win.size() > 0 && nums[win.peekLast()] < nums[i]) {
