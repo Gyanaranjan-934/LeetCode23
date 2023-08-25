@@ -1,67 +1,25 @@
 class Solution {
+    private boolean recFunc(int ind1,String s1,int ind2,String s2,String s3,int[][] dp){
+        if(ind1==s1.length())return s2.substring(ind2).equals(s3.substring(ind1+ind2));
+        else if(ind2==s2.length())return s1.substring(ind1).equals(s3.substring(ind1+ind2));
+
+        if(dp[ind1][ind2]!=-1)return dp[ind1][ind2]==0 ? false : true;
+
+        boolean res1 = false;
+        boolean res2 = false;
+        if(s3.charAt(ind1+ind2)==s1.charAt(ind1))
+            res1 = recFunc(ind1+1,s1,ind2,s2,s3,dp);
+        if(s3.charAt(ind1+ind2)==s2.charAt(ind2))
+            res2 = recFunc(ind1,s1,ind2+1,s2,s3,dp);
+
+        dp[ind1][ind2] = res1||res2 ? 1 : 0;
+
+        return res1 || res2;
+    }
     public boolean isInterleave(String s1, String s2, String s3) {
-        if (s1.length() + s2.length() != s3.length()) {
-            return false;
-        }
-
-        boolean[][] dp = new boolean[s1.length() + 1][s2.length() + 1];
-        dp[s1.length()][s2.length()] = true;
-
-        for (int i = s1.length(); i >= 0; i--) {
-            for (int j = s2.length(); j >= 0; j--) {
-                if (i < s1.length() && s1.charAt(i) == s3.charAt(i + j) && dp[i + 1][j]) {
-                    dp[i][j] = true;
-                }
-                if (j < s2.length() && s2.charAt(j) == s3.charAt(i + j) && dp[i][j + 1]) {
-                    dp[i][j] = true;
-                }
-            }
-        }
-        return dp[0][0];
-    }
-
-    private Map<Pair, Boolean> dp = new HashMap<>();
-    private boolean dfs(int i, int j, String s1, String s2, String s3) {
-        if (i == s1.length() && j == s2.length()) {
-            return true;
-        }
-        Pair pair = new Pair(i, j);
-        if (dp.containsKey(pair)) {
-            return dp.get(pair);
-        }
-
-        boolean result = false;
-        if (i < s1.length() && s1.charAt(i) == s3.charAt(i + j) && dfs(i + 1, j, s1, s2, s3)) {
-            result = true;
-        }
-        if (j < s2.length() && s2.charAt(j) == s3.charAt(i + j) && dfs(i, j + 1, s1, s2, s3)) {
-            result = true;
-        }
-
-        dp.put(pair, result);
-        return result;
-    }
-
-    private class Pair {
-        int first;
-        int second;
-
-        Pair(int first, int second) {
-            this.first = first;
-            this.second = second;
-        }
-
-        @Override
-        public int hashCode() {
-            return first * 31 + second;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            Pair other = (Pair) obj;
-            return first == other.first && second == other.second;
-        }
+        if(s1.length()+s2.length()!=s3.length())return false;
+        int[][] dp = new int[s1.length()][s2.length()];
+        for(int[] row : dp)Arrays.fill(row,-1);
+        return recFunc(0,s1,0,s2,s3,dp);
     }
 }
