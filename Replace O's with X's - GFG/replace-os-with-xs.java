@@ -39,45 +39,48 @@ class GFG{
 
 //User function Template for Java
 
+class Pair{
+    int row;
+    int col;
+    Pair(int a,int b){
+        this.row = a;
+        this.col = b;
+    }
+}
+
 class Solution{
-    static char[][] fill(int n, int m, char mat[][])
+    static char[][] fill(int n, int m, char arr[][])
     {
-        int[] drow = {-1,0,1,0};
-        int[] dcol = {0,1,0,-1};
+        Queue<Pair> q = new LinkedList<>();
         for(int i=0;i<n;i++){
-            if(mat[i][0]=='O'){
-                dfs(i,0,mat,drow,dcol);
-            }
-            if(mat[i][m-1]=='O'){
-                dfs(i,m-1,mat,drow,dcol);
-            }
+            if(arr[i][0]=='O')q.add(new Pair(i,0));
+            if(arr[i][m-1]=='O')q.add(new Pair(i,m-1));
         }
         for(int i=0;i<m;i++){
-            if(mat[0][i]=='O'){
-                dfs(0,i,mat,drow,dcol);
-            }
-            if(mat[n-1][i]=='O'){
-                dfs(n-1,i,mat,drow,dcol);
+            if(arr[0][i]=='O')q.add(new Pair(0,i));
+            if(arr[n-1][i]=='O')q.add(new Pair(n-1,i));
+        }
+        
+        int[] drow = {1,0,-1,0};
+        int[] dcol = {0,1,0,-1};
+        
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            arr[p.row][p.col] = 'M';
+            for(int i=0;i<4;i++){
+                int nrow = p.row+drow[i];
+                int ncol = p.col+dcol[i];
+                
+                if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && arr[nrow][ncol]=='O')
+                    q.add(new Pair(nrow,ncol));
             }
         }
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
-                if(mat[i][j]=='P')mat[i][j]='O';
-                else if(mat[i][j]=='O')mat[i][j]='X';
+                if(arr[i][j]=='O')arr[i][j]='X';
+                else if(arr[i][j]=='M')arr[i][j]='O';
             }
         }
-        return mat;
-    }
-    private static void dfs(int r,int c,char[][] mat,int[] drow,int[] dcol){
-        mat[r][c]='P';
-        int n = mat.length;
-        int m = mat[0].length;
-        for(int i=0;i<4;i++){
-            int nrow = r + drow[i];
-            int ncol = c + dcol[i];
-            if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && mat[nrow][ncol]=='O'){
-                dfs(nrow,ncol,mat,drow,dcol);
-            }
-        }
+        return arr;
     }
 }
