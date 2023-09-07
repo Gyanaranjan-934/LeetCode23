@@ -31,6 +31,8 @@ class GFG {
 // } Driver Code Ends
 
 
+
+
 // User function Template for Java
 
 class Pair{
@@ -44,6 +46,7 @@ class Pair{
 
 class Solution {
     int minimumMultiplications(int[] arr, int start, int end) {
+        if(start==end)return 0;
         int[] steps = new int[100000];
         steps[start] = 0;
         Arrays.fill(steps,Integer.MAX_VALUE);
