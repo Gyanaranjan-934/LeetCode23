@@ -17,13 +17,21 @@ class Solution {
             }
             arr.add(new Pair(i,sum));
         }
-        Collections.sort(arr,(x,y)->{
-            if(x.b==y.b)return x.a-y.a;
-            return x.b-y.b;
+        PriorityQueue<Pair> pq = new PriorityQueue<>((x,y)->{
+            if(x.b==y.b)return y.a-x.a;
+            return y.b-x.b;
         });
+        ArrayList<Pair> arr1 = new ArrayList<>();
+        for(int i=0;i<n;i++){
+            pq.add(arr.get(i));
+            if(pq.size()>k)pq.remove();
+        }
+        while(!pq.isEmpty()){
+            arr1.add(0,pq.remove());
+        }
         int[] res = new int[k];
         for(int i=0;i<k;i++){
-            res[i] = arr.get(i).a;
+            res[i] = arr1.get(i).a;
         }
         return res;
     }
